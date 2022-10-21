@@ -1,4 +1,3 @@
 package com.wswork.utils.exception
 
-class ExceptionDetails {
-}
+class ExceptionDetails(val message: String, val status: Int)

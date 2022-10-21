@@ -3,6 +3,7 @@ package com.wswork.brand.service
 import com.wswork.brand.dto.RegisterBrandDTO
 import com.wswork.brand.entity.Brand
 import com.wswork.brand.repository.BrandRepository
+import com.wswork.utils.exception.NotFoundException
 import lombok.RequiredArgsConstructor
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -21,7 +22,7 @@ class BrandService(val repository: BrandRepository) {
     }
 
     fun findById(id: Long): Brand {
-        return repository.findById(id).orElseThrow { RuntimeException("Brand not found") }
+        return repository.findById(id).orElseThrow { NotFoundException(String.format("Brand with id %d not found", id)) }
     }
 
     fun findAll(): List<Brand> {
