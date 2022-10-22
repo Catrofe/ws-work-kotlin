@@ -1,5 +1,6 @@
 package com.wswork.utils
 
+import com.wswork.utils.exception.ConflictException
 import com.wswork.utils.exception.ExceptionDetails
 import com.wswork.utils.exception.NotFoundException
 import org.springframework.http.HttpStatus
@@ -14,5 +15,10 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(NotFoundException::class)
     fun handleGenericException(ex: NotFoundException): ResponseEntity<ExceptionDetails> {
         return ResponseEntity(ExceptionDetails(ex.message!!, 404), HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(ConflictException::class)
+    fun handleConflictException(ex: ConflictException): ResponseEntity<ExceptionDetails> {
+        return ResponseEntity(ExceptionDetails(ex.message!!, 409), HttpStatus.CONFLICT)
     }
 }

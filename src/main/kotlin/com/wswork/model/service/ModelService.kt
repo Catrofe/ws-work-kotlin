@@ -6,6 +6,7 @@ import com.wswork.model.dto.EditModelDTO
 import com.wswork.model.entity.Model
 import com.wswork.model.repository.ModelRepository
 import com.wswork.model.vo.ModelVO
+import com.wswork.utils.exception.ConflictException
 import com.wswork.utils.exception.NotFoundException
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
@@ -57,7 +58,11 @@ class ModelService(val repository: ModelRepository,
 
     fun delete(id: Long) {
         val model = findByIdRaw(id)
-        repository.delete(model)
+        try {
+            repository.delete(model)
+        } catch (e: Exception) {
+            throw ConflictException(String.format("Unable to delete a Model that has Cars associated with it. Please delete Cars first to ensure data integrity. Model id: %d", id))
+        }
     }
 }
 

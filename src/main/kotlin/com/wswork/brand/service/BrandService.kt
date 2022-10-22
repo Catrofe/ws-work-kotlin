@@ -3,13 +3,10 @@ package com.wswork.brand.service
 import com.wswork.brand.dto.RegisterBrandDTO
 import com.wswork.brand.entity.Brand
 import com.wswork.brand.repository.BrandRepository
+import com.wswork.utils.exception.ConflictException
 import com.wswork.utils.exception.NotFoundException
 import lombok.RequiredArgsConstructor
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import javax.validation.Valid
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +34,11 @@ class BrandService(val repository: BrandRepository) {
 
     fun delete(id: Long) {
         val brand = findById(id)
-        repository.delete(brand)
+        try {
+            repository.delete(brand)
+        } catch (e: Exception) {
+            throw ConflictException(String.format("Unable to delete a Brand that has Models associated with it. Please delete Models first to ensure data integrity. Brand id: %d", id))
+        }
     }
 
 }
